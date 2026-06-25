@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-divine-brown: #5E2605;
+  --color-divine-dark: #2A1102;
+  --color-divine-yellow: #FFCD00;
+  --color-divine-lightBrown: #8B4513;
+  --color-divine-cream: #FEF7ED;
+  --color-divine-whatsapp: #25D366;
+}
+
+:root {
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #FEF7ED;
+  color: #2A1102;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
