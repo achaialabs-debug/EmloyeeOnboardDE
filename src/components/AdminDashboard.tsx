@@ -83,17 +83,15 @@ const AdminDashboard: React.FC = () => {
           .eq('value', pinInput);
 
         if (error) {
-          console.warn("Supabase auth check failed. Falling back to local storage auth comparison...", error);
-          // Fallback to local storage or dummy PIN if the table doesn't exist
-          isPinValid = (pinInput === '8228');
+          console.error("Supabase auth check failed:", error);
+          isPinValid = false;
         } else if (data && data.length > 0) {
           isPinValid = true;
         } else {
           isPinValid = false;
         }
       } else {
-        // Safe offline testing fallback PIN
-        isPinValid = (pinInput === '8228');
+        isPinValid = false;
       }
 
       if (isPinValid) {
