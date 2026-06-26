@@ -191,10 +191,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ setPage }) => {
             If you encounter any issues while completing the online application form, you can contact our candidate helpline directly.
           </p>
           <div className="inline-flex flex-col sm:flex-row items-center gap-4 bg-white border border-gray-100 px-6 py-4.5 rounded-2xl shadow-sm">
-            <span className="font-bold text-gray-800 text-base">📞 Contact Support: +91 8228946314</span>
+            <span className="font-bold text-gray-800 text-base">📞 Contact Support: +91 8228946317</span>
             <span className="hidden sm:inline text-gray-200">|</span>
             <a
-              href="https://wa.me/918228946314?text=Hi,%20I%20need%20help%20with%20onboarding%20on%20Divine%20Enterprises"
+              href="https://wa.me/918228946317?text=Hi,%20I%20need%20help%20with%20onboarding%20on%20Divine%20Enterprises"
               target="_blank"
               rel="noreferrer"
               className="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-colors"
