@@ -47,6 +47,8 @@ function App() {
       window.location.hash = '#/register';
     } else if (targetPage === 'landing') {
       window.location.hash = '';
+    } else if (targetPage === 'success') {
+      window.location.hash = '#/success';
     } else {
       setPage(targetPage);
     }

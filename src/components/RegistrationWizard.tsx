@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase, isSupabaseReady } from '../supabase';
 import { 
   ArrowRight, ArrowLeft, Upload, Check, AlertCircle, 
-  Award, Loader2, Hammer, BookOpen, User, Briefcase, Landmark
+  Award, Loader2, Hammer, BookOpen, User, Briefcase, Landmark, Copy
 } from 'lucide-react';
 
 interface FormData {
@@ -112,6 +112,10 @@ const RegistrationWizard: React.FC<RegistrationWizardProps> = ({ setPage, setSuc
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [compressionStatus, setCompressionStatus] = useState<{[key: string]: string}>({});
+  
+  const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false);
+  const [submittedCandidateData, setSubmittedCandidateData] = useState<any>(null);
+  const [copied, setCopied] = useState<boolean>(false);
 
   const itiTrades = [
     'Electrician (इलेक्ट्रीशियन)',
@@ -285,14 +289,14 @@ const RegistrationWizard: React.FC<RegistrationWizardProps> = ({ setPage, setSuc
         saveToLocalStorage(submissionData);
       }
 
-      setSuccessData({
+      setSubmittedCandidateData({
         registrationId: regId,
         fullName: formData.fullName,
         trade: formData.trade,
         mobile: formData.mobile,
         skillCategory: formType === 'unskilled' ? 'unskilled' : formData.skillCategory
       });
-      setPage('success');
+      setShowSuccessPopup(true);
     } catch (err: any) {
       console.error(err);
       setErrorMsg("Failed to submit registration. (सबमिट करने में विफलता)");
@@ -1093,6 +1097,90 @@ const RegistrationWizard: React.FC<RegistrationWizardProps> = ({ setPage, setSuc
 
         </form>
       </div>
+
+      {/* Success Popup Modal */}
+      {showSuccessPopup && submittedCandidateData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-all duration-300">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full border border-gray-150 shadow-2xl relative overflow-hidden transform scale-100 transition-all">
+            {/* Card Watermark */}
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gray-50 rounded-bl-full flex items-center justify-center font-extrabold text-gray-900/5 select-none text-2xl">
+              DEG
+            </div>
+
+            {/* Icon & Title */}
+            <div className="flex flex-col items-center text-center space-y-4 mb-6">
+              <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center border border-emerald-200 shadow-xs">
+                <Check className="w-8 h-8 text-emerald-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-gray-900 tracking-tight">Registration Successful!</h3>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">पंजीकरण सफलतापूर्वक पूरा हुआ</p>
+              </div>
+            </div>
+
+            {/* Candidate Info Summary Card */}
+            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 space-y-4 text-xs font-semibold text-left">
+              <div className="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-150">
+                <span className="text-[9px] uppercase font-bold text-gray-400">Registration ID</span>
+                <div className="flex items-center space-x-2">
+                  <span className="font-extrabold text-gray-950 tracking-wider text-sm">{submittedCandidateData.registrationId}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(submittedCandidateData.registrationId);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-gray-950 transition-colors cursor-pointer"
+                    title="Copy ID"
+                  >
+                    {copied ? (
+                      <span className="text-[9px] text-emerald-600 font-bold uppercase">Copied!</span>
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-1">
+                <div>
+                  <span className="text-[9px] uppercase font-bold text-gray-400 block">Candidate Name</span>
+                  <span className="font-bold text-gray-900">{submittedCandidateData.fullName}</span>
+                </div>
+                <div>
+                  <span className="text-[9px] uppercase font-bold text-gray-400 block">Mobile</span>
+                  <span className="font-bold text-gray-900">{submittedCandidateData.mobile}</span>
+                </div>
+                <div className="col-span-2">
+                  <span className="text-[9px] uppercase font-bold text-gray-400 block">Assigned Trade</span>
+                  <span className="font-bold text-gray-900">{submittedCandidateData.trade}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Info Text */}
+            <p className="text-[10px] text-gray-500 font-semibold text-center mt-5 leading-normal">
+              Your profile has been saved. Please proceed to view and download your official employment registration slip.
+            </p>
+
+            {/* Actions */}
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  setSuccessData(submittedCandidateData);
+                  setPage('success');
+                }}
+                className="w-full bg-gray-950 hover:bg-gray-800 text-white py-3.5 rounded-2xl font-bold flex items-center justify-center space-x-2 shadow-md hover:shadow-lg transition-all cursor-pointer text-xs"
+              >
+                <span>View & Print Slip</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
